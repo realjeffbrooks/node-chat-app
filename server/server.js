@@ -15,14 +15,14 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected on',socket.handshake.headers['user-agent']);
 
-  socket.emit('newMessage', {
-    from: 'jeff@jeff.com',
-    text: 'Hey dude!',
-    createdAt: 123
-  });
-
+  
   socket.on('createMessage', (message) => {
     console.log('create message', message);
+    io.emit('newMessage',{
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {
